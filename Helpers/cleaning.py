@@ -5,6 +5,29 @@ Created on Fri Feb 17 09:11:01 2023
 
 @author: cloclo
 """
+import pandas as pd
+import numpy as np
+import zipfile
+#from pandas_profiling import ProfileReport
+
+import datetime, warnings, scipy 
+import seaborn as sns
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+from matplotlib.pyplot import figure
+import matplotlib.patches as patches
+from matplotlib.patches import ConnectionPatch
+from collections import OrderedDict
+from matplotlib.gridspec import GridSpec
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+#from mpl_toolkits.basemap import Basemap
+
+import warnings
+warnings.filterwarnings(action='once')
 
 def Cleaning(data): 
     
