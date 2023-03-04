@@ -29,7 +29,7 @@ def annee_trimestre(data) :
         # num_trimestre indique le trimestre de la date mutation ie 1, 2, 3 ou 4
     data['num_trimestre'] = data['date_mutation'].dt.quarter
         # Concaténation sous la forme YEAR-Qi
-    data['quarter'] = data['Year'].astype(str) + '_Q' + data['num_trimestre'].astype(str)
+    data['num_trimestre'] = data['Year'].astype(str) + '_Q' + data['num_trimestre'].astype(str)
 
 
 # Filtre pour garder les données pertinentes pour le modèle
@@ -45,12 +45,12 @@ def filtre_data_pour_model(data, ville, type_local, quantile_low = None, quantil
     '''
     data_model = data.copy()
     
-    max_prix = np.quantile(data.Prix_m2, quantile_high)
-    min_prix = np.quantile(data.Prix_m2, quantile_low)
     
-    if quantile_low : 
+    if quantile_low :
+        min_prix = np.quantile(data.Prix_m2, quantile_low)
         data_model = data_model[data_model.Prix_m2 > min_prix]
-    if quantile_high : 
+    if quantile_high :
+        max_prix = np.quantile(data.Prix_m2, quantile_high)
         data_model = data_model[data_model.Prix_m2 < max_prix]
         
     data_model = data_model[(data_model['bv2012_name'] == "['" + ville + "']")
