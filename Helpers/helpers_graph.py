@@ -33,3 +33,8 @@ def map_data(data, year, variable) :
     plt.colorbar()
     plt.clim(0,10000)
     plt.show()
+    
+def plot_map(data_spatial):
+    
+    return data_spatial[data_spatial['Year'] == 2017].drop(['date_mutation'],axis = 1).explore(tiles="CartoDB positron",
+                                cmap="tab20b", column="iris_code")
