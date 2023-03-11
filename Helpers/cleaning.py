@@ -200,6 +200,16 @@ def Process_data(data, quantile_low, quantile_high):
     
     return df_final
 
+def Add_IRIS(data, df_iris):    
+    # turn df_test into geodataframe
+    df_spatial = gdp.GeoDataFrame(data, crs="EPSG:4326", 
+                                  geometry=points_from_xy(
+                                     data["longitude"], data["latitude"]),)
+    data_spatial = gdp.sjoin(df_spatial, df_iris,how='left', 
+                               predicate="within",)
+    
+    return data_spatial
+
 def Procedure(data_cleaned):
     
     data_cleaned_spatial = Add_IRIS(data_cleaned, df_iris)
