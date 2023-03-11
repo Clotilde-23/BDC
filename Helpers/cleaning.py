@@ -58,7 +58,7 @@ def Cleaning(data):
                ]
     
     #to keep the row if nature_culture is empty but code-type_local is filled
-    data = data[(data.nature_culture.isna()) | (data.code_type_local.isna() == False)]
+    #data = data[(data.nature_culture.isna()) | (data.code_type_local.isna() == False)]
     
     #we limited our self for the appartments, houses and dependences. so we exclude 'loal commerciales'
     data = data[(data['code_type_local'] == 1.0)        #Maison
@@ -68,13 +68,26 @@ def Cleaning(data):
     
     data = data[(data['nature_culture'] != "terrains a bâtir")]
     
+    # Creation of tow columns, 1 for the number of 'depandance' 
+    #                       and the second for the number of Houses or appartments per mutation
+    Nombre_dependance = data.groupby(['id_mutation'])['code_type_local'].count().reset_index()
+    Nombre_dependance.rename(columns={'code_type_local': 'Nombre_dependance'}, inplace=True)
+    data = data.merge(Nombre_dependance, on=['id_mutation'])
+    
+    Nombre_house = data[(data['code_type_local'] == 1) | 
+            (data['code_type_local'] == 2)].groupby(['id_mutation'])['code_type_local'].count().reset_index()
+    Nombre_house.rename(columns={'code_type_local': 'Nombre_house'}, inplace=True)
+    data = data.merge(Nombre_house, on=['id_mutation'])
+    data['Nombre_dependance'] = data['Nombre_dependance'] - data['Nombre_house']
+    
 
-    #fixing the problem of multiple Id_mutation for the same sale. 
+    # fixing the problem of multiple Id_mutation for the same sale. 
     #we have for the same sale a dependence and a house/appartment so we aggregated them in one row with on id_mutation.
     
     #in This fucntion we used only the first proposition(waiting to the meeting)
     data = data[(data['nature_culture'] == "sols") 
-                | (data.nature_culture.isna()) ].groupby(['id_mutation','numero_disposition','date_mutation'],
+                | (data.nature_culture.isna())
+                | (data['nature_culture'] == "jardins")].groupby(['id_mutation','numero_disposition','date_mutation'],
                                                     as_index=False).agg(
                                                        {'date_mutation':'first',
                                                         'code_type_local': 'min', 
@@ -87,13 +100,15 @@ def Cleaning(data):
                                                         'latitude':'max' , 'longitude':'max',
                                                         'nombre_lots':'max',
                                                         'numero_disposition': 'max',
-                                                        'code_departement':'first'
+                                                        'code_departement':'first',
+                                                        'Nombre_house':'max',
+                                                        'Nombre_dependance':'max'
                                                         })
     
     #setting the data for appartments and houses
     data = data[(data.code_type_local.isna() == False)]
     
-    data = data[(data['code_type_local'] == 1.0)        #Maison
+    data = data[(data['code_type_local'] == 1.0)        #Maison ' '
                | (data['code_type_local'] == 2.0) ]     #appartement   
     
     data['surface_reelle_bati'].fillna(0, inplace=True)
@@ -109,10 +124,10 @@ def Cleaning(data):
     data.drop(data[data['nombre_pieces_principales']>20].index, inplace=True)
 
     # SURFACE DU BIEN 
-    # On exclut les biens dont la surface est inférieure au seuil légal de 9 mètres carrés pour la location :
+    # On exclut les biens dont la surface est inférieure au seuil légal de 10 mètres carrés pour la location et les prix 
+    # moins que 2000 euros:
     data.drop(data[data['surface_reelle_bati']<10].index, inplace=True)
     data.drop(data[data['valeur_fonciere'] < 2000].index, inplace=True)
-
     
     return data
 
@@ -158,6 +173,11 @@ def Prix_m2(data):
     #Suppression des variables temporaires 
     data=data.drop(['Sum_surface_bati_iris', 'Sum_surface_terr_iris' , 'Sum_valeur_fonc'],axis=1)
     data.replace([np.inf, -np.inf], 0, inplace=True)
+    
+    #Vente_par_iris 
+    Vente_par_iris = data.groupby(['iris_code'])['id_mutation'].count().reset_index()
+    Vente_par_iris.rename(columns={'id_mutation' : 'Vente_par_iris'}, inplace=True)
+    data = data.merge(Vente_par_iris, on=['iris_code'])
     
     return data
 
