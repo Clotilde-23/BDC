@@ -174,10 +174,13 @@ def Prix_m2(data):
     data=data.drop(['Sum_surface_bati_iris', 'Sum_surface_terr_iris' , 'Sum_valeur_fonc'],axis=1)
     data.replace([np.inf, -np.inf], 0, inplace=True)
     
-    #Vente_par_iris 
-    Vente_par_iris = data.groupby(['iris_code'])['id_mutation'].count().reset_index()
-    Vente_par_iris.rename(columns={'id_mutation' : 'Vente_par_iris'}, inplace=True)
-    data = data.merge(Vente_par_iris, on=['iris_code'])
+    #Vente_par_iris_tri
+    data['num_trimestre'] = data['date_mutation'].dt.quarter
+    # Concaténation sous la forme YEAR-Qi
+    data['quarter'] = data['Year'].astype(str) + '_Q' + data['num_trimestre'].astype(str)
+    Vente_par_iris_tri = data.groupby(['iris_code', 'quarter'])['id_mutation'].count().reset_index()
+    Vente_par_iris_tri.rename(columns={'id_mutation' : 'Vente_par_iris_tri'}, inplace=True)
+    data = data.merge(Vente_par_iris_tri, on=['iris_code','quarter']) 
     
     return data
 
