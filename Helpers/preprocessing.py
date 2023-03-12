@@ -41,7 +41,6 @@ def filtre_data_pour_model(data, ville, type_local, quantile_low = None, quantil
     type_local : int (1 : Maison / 2 : Appartement)
     quantile_low : int (\in [0, 1])
     quantile_high : int (\in [0, 1])
-
     output : DataFrame (nettoyé)
     '''
     data_model = data.copy()
@@ -67,7 +66,6 @@ def split_temporel_V1(data, liste_features, output) :
     data : DataFrame (sur lequel on veut faire le split
     liste_features : list (des variables explicatives)
     output : str
-
     output : 4 DataFrame (X_train, X_test, y_train, y_test)
     '''
     # Trier la base par date
