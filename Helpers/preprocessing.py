@@ -58,6 +58,26 @@ def filtre_data_pour_model(data, ville, type_local, quantile_low = None, quantil
     
     return(data_model)
 
+def filter_quantile(data, var, quantile_low, quantile_high) :
+    '''
+    data : DataFrame (celui a nettoyer)
+    ville : str ('Paris', 'Lyon', ...)
+    type_local : int (1 : Maison / 2 : Appartement)
+    quantile_low : int (\in [0, 1])
+    quantile_high : int (\in [0, 1])
+    output : DataFrame (nettoyé)
+    '''
+    data_model = data.copy()
+    
+    if quantile_low :
+        min_prix = np.quantile(data[var], quantile_low)
+        data_model = data_model[data_model[var] > min_prix]
+    if quantile_high :
+        max_prix = np.quantile(data[var], quantile_high)
+        data_model = data_model[data_model[var] < max_prix]
+    
+    return(data_model)
+
 # Premier split temporel avec toutes la bases de données,
 # Les 20 derniers pourcent de la base sont dans l'éch de test
 # Le reste sert d'apprentissage
