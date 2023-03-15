@@ -58,6 +58,26 @@ def filtre_data_pour_model(data, ville, type_local, quantile_low = None, quantil
     
     return(data_model)
 
+def filter_quantile(data, var, quantile_low, quantile_high) :
+    '''
+    data : DataFrame (celui a nettoyer)
+    ville : str ('Paris', 'Lyon', ...)
+    type_local : int (1 : Maison / 2 : Appartement)
+    quantile_low : int (\in [0, 1])
+    quantile_high : int (\in [0, 1])
+    output : DataFrame (nettoyé)
+    '''
+    data_model = data.copy()
+    
+    if quantile_low :
+        min_prix = np.quantile(data[var], quantile_low)
+        data_model = data_model[data_model[var] > min_prix]
+    if quantile_high :
+        max_prix = np.quantile(data[var], quantile_high)
+        data_model = data_model[data_model[var] < max_prix]
+    
+    return(data_model)
+
 # Premier split temporel avec toutes la bases de données,
 # Les 20 derniers pourcent de la base sont dans l'éch de test
 # Le reste sert d'apprentissage
@@ -115,3 +135,15 @@ def nb_iris (data, path, dep_code):
     print(f"Length of all Paris IRIS : {len(IRIS_ville)}")
     print(f"Length of IRIS in DF : {len(iris_df)}")
     print(f"Number of IRIS not in DF : {len(list_dif)}")
+
+# Ajouter des indicatrices si la variable continue dépasse un seuil
+def dummies_pr_var_continues(data, var, seuil) :
+    '''
+    data : DataFrame
+    var : str
+    seuil : int / float
+    output : None
+    '''
+    var_dummy = var + '_dummy'
+    data[var_dummy] = 0
+    data.loc[data[var] > seuil, var_dummy] = 1
