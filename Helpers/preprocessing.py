@@ -135,3 +135,15 @@ def nb_iris (data, path, dep_code):
     print(f"Length of all Paris IRIS : {len(IRIS_ville)}")
     print(f"Length of IRIS in DF : {len(iris_df)}")
     print(f"Number of IRIS not in DF : {len(list_dif)}")
+
+# Ajouter des indicatrices si la variable continue dépasse un seuil
+def dummies_pr_var_continues(data, var, seuil) :
+    '''
+    data : DataFrame
+    var : str
+    seuil : int / float
+    output : None
+    '''
+    var_dummy = var + '_dummy'
+    data[var_dummy] = 0
+    data.loc[data[var] > seuil, var_dummy] = 1
