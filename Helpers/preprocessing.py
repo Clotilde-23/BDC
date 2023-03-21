@@ -53,8 +53,7 @@ def filtre_data_pour_model(data, ville, type_local, quantile_low = None, quantil
         max_prix = np.quantile(data.Prix_m2, quantile_high)
         data_model = data_model[data_model.Prix_m2 < max_prix]
         
-    data_model = data_model[(data_model['bv2012_name'] == "['" + ville + "']")
-                     & (data_model.code_type_local == type_local)]
+    data_model = data_model[data_model.code_type_local == type_local]
     
     return(data_model)
 
