@@ -11,9 +11,6 @@ def Base_Creation(df17, df18, df19, df20, df21, df22):
     df_cleaned20 = Cleaning(df20)
     df_cleaned21 = Cleaning(df21)
     df_cleaned22 = Cleaning(df22)
-    
-    #cleaning IRIS
-    df_iris = Cleaning_iris(df_iris_2022)
 
     # Concat all data
     df_cleaned_tot = pd.concat([df_cleaned17, df_cleaned18, 
