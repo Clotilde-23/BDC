@@ -5,6 +5,23 @@ from sklearn.metrics import mean_squared_error
 from preprocessing import split_temporel_V1
 from score import compute_scores
 
+def MAPE(Y_actual, Y_Predicted):
+    mape = np.mean(np.abs((Y_actual - Y_Predicted)/Y_actual))*100
+    return mape
+
+def MDAPE(Y_actual, Y_Predicted):
+    mdape = np.median(np.abs((Y_actual - Y_Predicted)/Y_actual))*100
+    return mdape
+
+def compute_scores(model, X_test, y_test) :
+    y_pred = model.predict(X_test)
+
+    mape = MAPE(np.exp(y_test), np.exp(y_pred))
+    mdape = MDAPE(np.exp(y_test), np.exp(y_pred))
+    
+    print("MAPE: ", mape)
+    print("MDAPE: ", mdape)
+
 def model_OLS(data, feature_geo, feature_temp, feature_autre, output) : 
     
         # Filtrer les variables pour le modèle
