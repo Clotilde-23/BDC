@@ -242,6 +242,22 @@ def Add_revenue(data, revenues):
     data = data.merge(revenues, on = 'iris_code')
     
     return data
+
+##Add ecoles
+def Add_ecole(data, ecoles):
+    ecoles.rename(columns={'IRIS' : 'iris_code'}, inplace=True)
+    ecoles = ecoles[['iris_code' , 'Ec_maternelle', 'Ec_elementaire']]
+    data = data.merge(ecoles, on = 'iris_code')
+    
+    return data
+
+##Add activités_residents
+def Add_activites(data, activites):
+    activites.rename(columns={'IRIS' : 'iris_code'}, inplace=True)
+    data = data.merge(activites, on = 'iris_code')
+    
+    return data
+
     
 ## Adding metros
 def num_dist_metro(test) : 
@@ -271,3 +287,35 @@ def num_dist_metro(test) :
     dist_metro = np.min(distances)
     
     return distances
+
+def add_metro(df , metros):
+    df['iris_code'] = df['iris_code'].astype(str)
+    metros['iris_code'] = metros['iris_code'].str[2:11]
+    metros['Arrondissement'] = metros['iris_code'].str[:5]
+    df['Arrondissement'] = df['iris_code'].str[:5]
+    
+    
+    N_metros_list = []
+    N_metros_list_arr = []
+    dist_metros_list = []
+    error = []
+    
+    for i in range(df.shape[0]):
+        print(i)
+        logt = df[['latitude', 'longitude', 'iris_code', 'Arrondissement']].iloc[i,:]
+        dist_metros_list.append(num_dist_metro(logt))
+        
+    df['dist_metro']    = dist_metros_list
+    list_metros = df["dist_metro"].to_list()
+    list_min = []
+    for i in range(len(list_metros)) :
+        dist = []
+        for j in range(len(list_metros[i])):
+            distance = list_metros[i][j]
+            distance = float(distance)
+            dist.append(distance)
+        list_min.append(np.min(dist))
+    
+    df['dist_metro'] = list_min
+    
+    return df

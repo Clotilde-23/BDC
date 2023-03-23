@@ -68,16 +68,23 @@ def Base_Ville(df_cleaned_tot, df_iris_2022, logt_iris,revenues, metros , Name):
     df_data_Processed1   = Process_data(df_data_price, 0.1, 0.9)
     df_data_Processed2   = Process_data_2(df_data_Processed1)
     
-    df_data_vf           = Vente_iris_tri(df_data_Processed2)
-    df_data_logement     = Add_logement(df_data_vf, logt_iris)
+    df_data_iris         = Vente_iris_tri(df_data_Processed2)
+    df_data_logement     = Add_logement(df_data_iris , logt_iris)
     df_data_revenues     = Add_revenue(df_data_logement , revenues)
+    df_data_ecole        = Add_ecole(df_data_revenues , ecoles)
+    df_data_vf           = Add_activites(df_data_ecole , activites)
+    
+    
+    if Name == 'Paris':  
+        df_data_vf  = add_metro(df_data_vf, metros)
     
     #Filtrer
-    df_data_appartement_VF = data_spatial_data[(data_spatial_data['Nombre_house']==1) 
-                                                 & (data_spatial_data['code_type_local']==2)]
-    df_data_Maison_VF = data_spatial_data[(data_spatial_data['Nombre_house']==1) 
-                                            & (data_spatial_data['code_type_local']==1)]
+    df_data_appartement_VF = df_data_vf [(df_data_vf ['Nombre_unite']==1) 
+                                                 & (df_data_vf ['code_type_local']==2)]
+    df_data_Maison_VF      = df_data_vf [(df_data_vf ['Nombre_unite']==1) 
+                                                 & (df_data_vf ['code_type_local']==1)]
     
     return df_data_appartement_VF, df_data_Maison_VF
+    
     
     
