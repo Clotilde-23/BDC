@@ -119,6 +119,21 @@ def model_RF_post_KNN(df_test, df_train, features_RF, features_KNN, label_train,
 
     return(rforest_pipe)
 
+
+def features_importances(model_importances, X_train_model) :
+    #X_train_model = df_train[features_model]
+    indices = np.argsort(model_importances)[::-1]
+    columns = X_train_model.columns
+    # plot
+    nb_features = X_train_model.shape[1]
+    plt.figure(figsize=(15, 8))
+    plt.title("Feature importances")
+    plt.barh(
+        range(nb_features),
+        model_importances[indices],
+        color='b')
+    plt.yticks(range(nb_features), columns[indices], rotation='horizontal', size=10)
+    plt.show()
     
    
 
