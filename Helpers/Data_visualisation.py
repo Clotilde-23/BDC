@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.basemap import Basemap
+#from mpl_toolkits.basemap import Basemap
 
 
 
@@ -47,20 +47,11 @@ def plot_map(data_spatial):
 
 
 
-def visualise(df, vmin, vmax, ville, type_local, quantile_high, quantile_low):
-    
-    max_prix = np.quantile(df.Prix_m2, quantile_high)
-    min_prix = np.quantile(df.Prix_m2, quantile_low)
-    
-    df_to_visualise = df[(df['bv2012_name'] == "['" + ville + "']")
-                        & (df.Prix_m2 < max_prix)
-                        & (df.Prix_m2 > min_prix)
-                        & (df.code_type_local == type_local)]
-    
-    df_sorted = df_to_visualise.sort_values(by='Prix_m2')
+def visualise(df, var_prix):
+    df_sorted = df.sort_values(by=var_prix)
     x = df_sorted['longitude']
     y = df_sorted['latitude']
-    c = df_sorted['Prix_m2'] 
+    c = df_sorted[var_prix] 
 
     plt.rcParams['figure.figsize'] = [7, 5]
     plt.rcParams['figure.dpi'] = 100 
