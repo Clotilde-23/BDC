@@ -2,6 +2,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
+import matplotlib.colors
+import contextily as ctx
+
 
 
 
@@ -68,3 +71,14 @@ def visualise(df, vmin, vmax, ville, type_local, quantile_high, quantile_low):
     plt.scatter(x, y, s=0.01, c=c, cmap='plasma_r', alpha=0.8)
     plt.colorbar()
     plt.show()
+    
+def figure_rapport(data):
+    norm=plt.Normalize(8000,20000)
+    cmap = matplotlib.colors.LinearSegmentedColormap.from_list("", ['gray', "Lightblue"])
+
+    df_wm = data.to_crs(epsg=3857)
+    
+    ax1 = df_wm.plot(figsize=(15, 15),column="Pris_m2_moy_iris", 
+                     cmap = cmap, norm = norm, alpha=0.1, edgecolor='k', legend = True)
+    ax1.set_axis_off()
+    return ctx.add_basemap(ax1)
