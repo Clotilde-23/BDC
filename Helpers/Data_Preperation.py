@@ -276,7 +276,7 @@ def num_dist_metro(test) :
             point_metro = [latitude_metro, longitude_metro]
             point_bien = [test.latitude, test.longitude]
             distances.append(dist(point_bien, point_metro))
-    else :
+    elif N_metros_arr > 0 :
         for i in range(metro_arr.shape[0]) : 
         
             latitude_metro = metro_arr['Latitude'].iloc[i]
@@ -284,6 +284,8 @@ def num_dist_metro(test) :
             point_metro = [latitude_metro, longitude_metro]
             point_bien = [test.latitude, test.longitude]
             distances.append(dist(point_bien, point_metro))
+    else:
+        distances.append(1000)
     dist_metro = np.min(distances)
     
     return distances
