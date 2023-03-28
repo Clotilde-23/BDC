@@ -38,7 +38,7 @@ def model_OLS_prix(data, outcome, features, summary = True) :
     return(model)
 
 def indice_prix_quarter(model_ols_prix, plot = True) : 
-    indices = model.params[:15]
+    indices = model_ols_prix.params[:15]
     indices = indices[0] + indices
     indices[0] = indices[0]/2
     index = indices.index[1:].insert(0, 'quarter_2017_Q3')
