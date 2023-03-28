@@ -59,7 +59,6 @@ def add_indice_prix(data_train, indices) :
     # Growth
     growth = indices.pct_change()
     growth[0] = 0
-    growth_plot = indices_plot.pct_change()
     
     growth_cum = growth.copy()
     growth_cum[1] = 1+growth_cum[1]
