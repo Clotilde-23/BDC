@@ -202,7 +202,7 @@ def Vente_iris_tri(data):
     
     return data
 
-
+#add indice de prix
 def Add_IPL(data, ipl):
     
     ipl.columns = ['date','IPL']
@@ -214,7 +214,7 @@ def Add_IPL(data, ipl):
     
     return data
 
-
+#add des indicateur sur les logements
 def Add_logement(data, logt_iris):
     
     logt_iris.columns
@@ -235,7 +235,7 @@ def Add_logement(data, logt_iris):
     
     return data
 
-##Add revenue 
+#Add revenue des population 
 def Add_revenue(data, revenues):
     revenues.rename(columns={'IRIS' : 'iris_code'}, inplace=True)
     revenues = revenues[['iris_code' , 'DISP_MED19']]
@@ -258,9 +258,27 @@ def Add_activites(data, activites):
     
     return data
 
+## distance between two points    
+def distance_metro(point1, point2):
+    R = 6373.0
+
+    lat1 = radians(point1[0])
+    lon1 = radians(point1[1])
+    lat2 = radians(point2[0])
+    lon2 = radians(point2[1])
+
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
+
+    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+    distance = R * c * 1000 #ditance en metres
     
+    return distance
+
 ## Adding metros
-def num_dist_metro(test) : 
+def num_dist_metro(test , metros) : 
     metro_iris = metros[metros['iris_code'] == test.iris_code]
     metro_arr = metros[metros['Arrondissement'] == test.Arrondissement]
     #print(metro_iris.shape[0])
@@ -275,7 +293,7 @@ def num_dist_metro(test) :
             longitude_metro = metro_iris['Longitude'].iloc[i]
             point_metro = [latitude_metro, longitude_metro]
             point_bien = [test.latitude, test.longitude]
-            distances.append(dist(point_bien, point_metro))
+            distances.append(distance_metro(point_bien, point_metro))
     elif N_metros_arr > 0 :
         for i in range(metro_arr.shape[0]) : 
         
@@ -283,9 +301,9 @@ def num_dist_metro(test) :
             longitude_metro = metro_arr['Longitude'].iloc[i]
             point_metro = [latitude_metro, longitude_metro]
             point_bien = [test.latitude, test.longitude]
-            distances.append(dist(point_bien, point_metro))
+            distances.append(distance_metro(point_bien, point_metro))
     else:
-        distances.append(1000)
+        distances.append(15000)
     dist_metro = np.min(distances)
     
     return distances
@@ -305,7 +323,7 @@ def add_metro(df , metros):
     for i in range(df.shape[0]):
         print(i)
         logt = df[['latitude', 'longitude', 'iris_code', 'Arrondissement']].iloc[i,:]
-        dist_metros_list.append(num_dist_metro(logt))
+        dist_metros_list.append(num_dist_metro(logt, metros))
         
     df['dist_metro']    = dist_metros_list
     list_metros = df["dist_metro"].to_list()
