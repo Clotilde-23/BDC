@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import datetime, warnings, scipy 
 from sklearn.preprocessing import StandardScaler
+from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 def Process_data(data, quantile_low, quantile_high):    
     
