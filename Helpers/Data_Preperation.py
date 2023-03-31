@@ -202,7 +202,7 @@ def Vente_iris_tri(data):
     
     return data
 
-
+#add indice de prix
 def Add_IPL(data, ipl):
     
     ipl.columns = ['date','IPL']
@@ -214,7 +214,7 @@ def Add_IPL(data, ipl):
     
     return data
 
-
+#add des indicateur sur les logements
 def Add_logement(data, logt_iris):
     
     logt_iris.columns
@@ -235,7 +235,7 @@ def Add_logement(data, logt_iris):
     
     return data
 
-##Add revenue 
+#Add revenue des population 
 def Add_revenue(data, revenues):
     revenues.rename(columns={'IRIS' : 'iris_code'}, inplace=True)
     revenues = revenues[['iris_code' , 'DISP_MED19']]
