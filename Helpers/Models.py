@@ -78,6 +78,29 @@ def add_indice_prix(data_train, indices) :
     
     return(data)
 
+def add_indice_prix_house(data_train, indices) :
+    # Growth
+    growth = indices.pct_change()
+    growth[0] = 0
+    
+    growth_cum = growth.copy()
+    growth_cum[1] = 1+growth_cum[1]
+    for i in range(1,len(growth)-1) : 
+        growth_cum[i+1] = (growth_cum[i])*(1+growth[i+1])
+    growth_cum[0] = 1
+    
+    df_growth = pd.DataFrame(growth_cum).reset_index()
+    df_growth.columns  = ['quarter', 'pct_change']
+    
+    df_growth['pct_change_toQ1_2021'] = df_growth.iloc[14,1]-df_growth['pct_change']
+    
+    # Merge with data
+    data = data_train.copy()
+    data = data.merge(df_growth, on = 'quarter', how = 'left')
+    data['val_fonciere_actualise_Q1_2021'] = data['valeur_fonciere']*(1+data['pct_change_toQ1_2021'])
+    
+    return(data)
+
 # -------------    KNN   ------------------ #
 
 def model_KNN_coordinates(df_train, df_test, features,
