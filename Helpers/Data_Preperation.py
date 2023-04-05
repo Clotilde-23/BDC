@@ -235,7 +235,7 @@ def Add_logement(data, logt_iris):
     
     return data
 
-#Add revenue des population 
+##Add revenue des population 
 def Add_revenue(data, revenues):
     revenues.rename(columns={'IRIS' : 'iris_code'}, inplace=True)
     revenues = revenues[['iris_code' , 'DISP_MED19']]
@@ -258,7 +258,7 @@ def Add_activites(data, activites):
     
     return data
 
-## distance between two points    
+## distance between two points en metres
 def distance_metro(point1, point2):
     R = 6373.0
 
