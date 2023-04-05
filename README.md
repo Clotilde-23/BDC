@@ -5,7 +5,7 @@ This project is realised in the context of the Buisness Data Challenge at Ensae.
 and investments. 
 
 In this work, we focused on four cities: Paris, Lyon, Marseille and Toulouse.
-We managed to predict prices with a median absolute percentage error of 7.93\% for Paris, 8.94\% for Lyon, 10.13\% for Toulouse.
+We managed to predict prices with a median absolute percentage error of 7.93\% for Paris, 8.71\% for Lyon, 9.84\% for Toulouse.
 
 
 ## Structure of the repository
